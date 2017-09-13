@@ -63,7 +63,7 @@ class ViewController: UIViewController,UITableViewDataSource {
             try managedContext.save()
             people.append(person)
         } catch let error as NSError {
-            print("could not save.\(error) \(error.userInfo)")
+            print("could not save in db.\(error) \(error.userInfo)")
         }
         
     }
