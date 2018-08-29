@@ -17,37 +17,45 @@ class ViewController: UIViewController,UITableViewDataSource {
     override func viewDidLoad() {
         super.viewDidLoad()
         title = "Name List"
-        Show_data.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+       // Show_data.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         
         // Do any additional setup after loading the view, typically from a nib.
     }
     
     @IBAction func addName(_ sender: UIBarButtonItem) {
+        
         let alert = UIAlertController(title: "New Name", message: "Add name list", preferredStyle: .alert)
+        alert.addTextField(configurationHandler: { (name : UITextField!) in
+            name.placeholder = "Enter Name"
+        })
+        alert.addTextField(configurationHandler: {(age : UITextField!) in
+            age.placeholder = "Enter Age"
+        })
         let saveAction = UIAlertAction(title: "Save", style: .default) { [unowned self] action in
-            guard let textField = alert.textFields?.first,
-               
-                 let nameToSave = textField.text else{
-                    return
-            }
+          let nameToSave = alert.textFields![0] as UITextField
+            let age = alert.textFields![1] as UITextField
+//            guard let textField = alert.textFields?.first,
+//
+//                 let nameToSave = textField.text else{
+//                    return
+//            }
         //    self.name.append(nameToSave)
-            self.save(name: nameToSave)
+            self.save(name: nameToSave.text!, age: age.text!)
             self.Show_data.reloadData()
-            
-
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .default)
-        alert.addTextField()
+       // alert.addTextField()
         
         alert.addAction(saveAction)
         alert.addAction(cancelAction)
         present(alert, animated: true)
      //   [unowed self] action in
-        // check pull request
+       
         
     }
-    func save(name: String){
+    func save(name: String, age: String){
+       
         guard let appDelegate = UIApplication.shared.delegate as? AppDelegate else{
         return
         }
@@ -59,6 +67,7 @@ class ViewController: UIViewController,UITableViewDataSource {
         let person = NSManagedObject(entity: entity, insertInto: managedContext)
         
         person.setValue(name, forKey: "name")
+        person.setValue(age, forKey: "age")
         
         do {
             try managedContext.save()
@@ -66,6 +75,7 @@ class ViewController: UIViewController,UITableViewDataSource {
         } catch let error as NSError {
             print("could not save in db.\(error) \(error.userInfo)")
         }
+        print("Data \(people)...")
         
     }
     
@@ -74,10 +84,14 @@ class ViewController: UIViewController,UITableViewDataSource {
         return people.count
     }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath) as! dataTableViewCell
         let person = people[indexPath.row]
       //  cell.textLabel?.text = name[indexPath.row]
-        cell.textLabel?.text  = person.value(forKeyPath: "name") as? String
+       // cell.textLabel?.text  = person.value(forKeyPath: "name") as? String
+        let name = person.value(forKey: "name") as? String
+        let age = person.value(forKey: "age") as? String
+        cell.name.text = "Name: "+name!
+        cell.age.text = "Age: "+age!
         return cell
     }
     
