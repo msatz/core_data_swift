@@ -15,8 +15,7 @@ class JsonInCoreDataViewController: UIViewController, UITableViewDelegate, UITab
     var image = [String]()
     var titleString = [String]()
     var categ:[NSManagedObject] = []
-    
-    override func viewDidLoad() {
+        override func viewDidLoad() {
         super.viewDidLoad()
         if Reachability.isConnectedToNetwork() == true{
             loadData()
@@ -24,8 +23,6 @@ class JsonInCoreDataViewController: UIViewController, UITableViewDelegate, UITab
         else {
             fetchDataFromCore()
         }
-        // Do any additional setup after loading the view.
-        
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if Reachability.isConnectedToNetwork() == true{
@@ -59,7 +56,7 @@ class JsonInCoreDataViewController: UIViewController, UITableViewDelegate, UITab
                             self.titleString.append(titleStringJson)
                             if  self.titleString.count <= 10{
                                 self.coreStorage(catgName: titleStringJson)
-                                print ("check")
+                                print ("vaule added..")
                             }
                         }
                         self.dataTableView.reloadData()
