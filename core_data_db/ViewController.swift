@@ -18,7 +18,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         super.viewDidLoad()
         title = "Name List"
        // Show_data.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-
         // Do any additional setup after loading the view, typically from a nib.
     }
     @IBAction func addName(_ sender: UIBarButtonItem) {
@@ -48,7 +47,7 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         present(alert, animated: true)
      //   [unowed self] action in
     }
-    
+
     func save(name: String, age: Int?){
         let randomNum:UInt32 = arc4random_uniform(10000)
         let Uid:String = String(randomNum)
@@ -71,7 +70,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
             print("could not save in db.\(error) \(error.userInfo)")
         }
         print("Data \(people)...")
-        
     }
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return people.count
@@ -95,7 +93,6 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
     }
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if editingStyle == UITableViewCellEditingStyle.delete{
- 
             let appdelegate = UIApplication.shared.delegate as? AppDelegate
             let managedContext = appdelegate?.persistentContainer.viewContext
                 managedContext?.delete(people[indexPath.row])
@@ -107,7 +104,8 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
             people.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .fade)
             Show_data.reloadData()
-//            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Person")
+//       
+            let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Person")
 //            do{
 //                let fetchData = try managedContext?.fetch(fetchRequest)
 //                managedContext?.delete(fetchData![indexPath.row])
@@ -125,14 +123,12 @@ class ViewController: UIViewController,UITableViewDataSource,UITableViewDelegate
         }
         let managedContext = appdelegate.persistentContainer.viewContext
         let fetchRequest = NSFetchRequest<NSManagedObject>(entityName:"Person")
-        
         do {
            people =  try managedContext.fetch(fetchRequest)
         } catch let error as NSError {
              print("Could not fetch. \(error), \(error.userInfo)")
         }
     }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
